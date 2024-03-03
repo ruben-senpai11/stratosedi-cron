@@ -1,7 +1,10 @@
 {
   "dependencies": {
+    "@shopify/shopify-api": "^9.4.1",
     "axios": "^1.6.7",
     "dotenv": "^16.4.5",
-    "node-cron": "^3.0.3"
+    "node-cron": "^3.0.3",
+    "puppeteer": "^22.3.0",
+    "shopify-api": "^0.2.3"
   }
 }

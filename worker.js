@@ -15,7 +15,7 @@ const accessToken = process.env.SHOPIFY_ACCESS_TOKEN;
 const data = { action: "make_importations" };
 
 // Define the cron schedule (e.g., every hour)
-const schedule = '*/2 * * * *'; // Every hour at the beginning (0th minute)
+const schedule = '*/1 * * * *'; // Every hour at the beginning (0th minute)
 
 cron.schedule(schedule, async () => {
   try {
@@ -32,4 +32,8 @@ cron.schedule(schedule, async () => {
   }
 });
 
-console.log("Worker started, the cron is launched...");
+
+const date = new Date();
+const timeString = date.toLocaleTimeString();
+
+console.log(timeString, "Worker.js started, the cron is launched...");

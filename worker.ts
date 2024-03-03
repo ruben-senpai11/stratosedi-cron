@@ -1,34 +1,31 @@
-// my-script.ts
+require('dotenv').config();
+const cron = require('node-cron');
 
-import { Shopify } from "@shopify/shopify-api";
+const { Shopify, shopifyApi } = require("@shopify/shopify-api");
 
-const shopify = new Shopify({
+const { default: setAbstractRuntimeString } = require("@shopify/shopify-api/adapters/node");
+
+
+setAbstractRuntimeString(nodeRuntimeString);
+
+const shopify = new shopifyApi({
   apiKey: process.env.SHOPIFY_API_KEY,
-  password: process.env.SHOPIFY_API_PASSWORD,
-  shopName: process.env.SHOPIFY_SHOP_NAME,
+  apiSecretKey: process.env.SHOPIFY_API_SECRET,
+  hostName: process.env.SHOPIFY_HOST_NAME,
+  scopes: ['read_orders', 'write_orders'], // Adjust scopes based on your needs
 });
 
-async function updateOrders(): Promise<void> {
+async function updateOrders() {
   const orders = await shopify.order.list();
 
-  for (const order of orders) {
-    // Mettre à jour l'état de la commande (type attendu par 'update' à vérifier dans la doc si besoin)
-    await shopify.order.update(order.id, { status: "shipped" });
-  }
+  console.log(orders)
+
 }
 
-async function updateInventory(): Promise<void> {
-  const products = await shopify.product.list();
+const schedule = '*/2 * * * *'; 
 
-  for (const product of products) {
-    // Mettre à jour le stock du produit (type attendu par 'update' à vérifier dans la doc si besoin)
-    await shopify.product.update(product.id, { inventory_quantity: 100 });
-  }
-}
-
-async function main(): Promise<void> {
+cron.schedule(schedule, async () => {
   await updateOrders();
-  await updateInventory();
-}
+});
 
-main();
+console.log("Worker started, the cron is launched...");
